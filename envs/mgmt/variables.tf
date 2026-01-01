@@ -3,7 +3,7 @@
 variable "aws_region" {
   description = "AWS 리전"
   type        = string
-  default     = "ap-southeast-2"
+  default     = "ap-northeast-1"
 }
 
 variable "aws_account_id" {
@@ -20,7 +20,7 @@ variable "project_name" {
 variable "owner_prefix" {
   description = "소유자 프리픽스"
   type        = string
-  default     = "min"
+  default     = "jung"
 }
 
 variable "environment" {
@@ -39,7 +39,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "가용영역 목록"
   type        = list(string)
-  default     = ["ap-southeast-2a", "ap-southeast-2c"]
+  default     = ["ap-northeast-1a", "ap-northeast-1c"]
 }
 
 # EKS 설정

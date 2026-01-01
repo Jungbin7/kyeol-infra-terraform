@@ -27,3 +27,24 @@ resource "aws_nat_gateway" "main" {
 
   depends_on = [aws_internet_gateway.main]
 }
+
+# -----------------------------------------------------------------------------
+# PG Dedicated NAT Gateway (결제 전용 고정 EIP)
+# -----------------------------------------------------------------------------
+resource "aws_eip" "pg_nat" {
+  count  = var.enable_pg_nat ? 1 : 0
+  domain = "vpc"
+  tags   = merge(var.tags, { Name = "${var.name_prefix}-pg-nat-eip" })
+}
+
+resource "aws_nat_gateway" "pg" {
+  count         = var.enable_pg_nat ? 1 : 0
+  allocation_id = aws_eip.pg_nat[0].id
+  subnet_id     = aws_subnet.public[0].id # Public 서브넷에 배치
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-pg-nat"
+  })
+
+  depends_on = [aws_internet_gateway.main]
+}

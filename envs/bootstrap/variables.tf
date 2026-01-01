@@ -4,7 +4,7 @@
 variable "aws_region" {
   description = "AWS 리전"
   type        = string
-  default     = "ap-southeast-2"
+  default     = "ap-northeast-1"
 }
 
 variable "aws_account_id" {
@@ -19,9 +19,9 @@ variable "project_name" {
 }
 
 variable "owner_prefix" {
-  description = "소유자 프리픽스 (min-)"
+  description = "소유자 프리픽스 (jung-)"
   type        = string
-  default     = "min"
+  default     = "jung"
 }
 
 variable "enable_kms_encryption" {

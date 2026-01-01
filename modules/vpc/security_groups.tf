@@ -65,13 +65,13 @@ resource "aws_security_group" "rds" {
   description = "Security group for RDS PostgreSQL"
   vpc_id      = aws_vpc.main.id
 
-  # PostgreSQL 인바운드 (App 서브넷에서만)
+  # PostgreSQL 인바운드 (전체 허용 - 테스트용)
   ingress {
-    description = "PostgreSQL from App subnets"
+    description = "PostgreSQL from anywhere (Testing)"
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = var.app_private_subnet_cidrs
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # 아웃바운드 없음 (RDS는 외부 통신 불필요)
@@ -91,13 +91,13 @@ resource "aws_security_group" "cache" {
   description = "Security group for ElastiCache Valkey/Redis"
   vpc_id      = aws_vpc.main.id
 
-  # Redis 인바운드 (App 서브넷에서만)
+  # Redis 인바운드 (전체 허용 - 테스트용)
   ingress {
-    description = "Redis from App subnets"
+    description = "Redis from anywhere (Testing)"
     from_port   = 6379
     to_port     = 6379
     protocol    = "tcp"
-    cidr_blocks = var.app_private_subnet_cidrs
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = merge(var.tags, {

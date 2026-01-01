@@ -43,11 +43,23 @@ variable "cache_private_subnet_cidrs" {
   default     = []
 }
 
+variable "pg_private_subnet_cidrs" {
+  description = "PG 전용 Private 서브넷 CIDR 목록"
+  type        = list(string)
+  default     = []
+}
+
 # NAT Gateway 설정
 variable "enable_nat_gateway" {
   description = "NAT Gateway 생성 여부"
   type        = bool
   default     = true
+}
+
+variable "enable_pg_nat" {
+  description = "PG 전용 NAT Gateway 생성 여부"
+  type        = bool
+  default     = false
 }
 
 variable "single_nat_gateway" {

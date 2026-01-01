@@ -5,18 +5,19 @@ locals {
   name_prefix  = "${var.owner_prefix}-${var.project_name}-${var.environment}"
   cluster_name = "${local.name_prefix}-eks"
 
-  # DEV CIDR 설정 (AWS EKS/RDS는 최소 2개 AZ 서브넷 필요)
-  # spec.md 기준에서 AWS 제약 충족을 위해 2번째 AZ 추가
-  public_subnet_cidrs       = ["10.10.0.0/24", "10.10.1.0/24"]        # 2 AZ (a, c)
-  app_private_subnet_cidrs  = ["10.10.4.0/23", "10.10.6.0/23"]        # 2 AZ (a, c) - EKS 요구사항
-  data_private_subnet_cidrs = ["10.10.9.0/24", "10.10.10.0/24"]       # 2 AZ (a, c) - RDS 서브넷 그룹 요구사항
-  # DEV에는 cache subnet 없음
+  # DEV CIDR 설정 (Tokyo 리전 기준)
+  public_subnet_cidrs       = ["10.10.0.0/24", "10.10.1.0/24"]
+  app_private_subnet_cidrs  = ["10.10.4.0/22", "10.10.8.0/22"] 
+  pg_private_subnet_cidrs   = ["10.10.12.0/24"]
+  cache_private_subnet_cidrs = ["10.10.13.0/24", "10.10.14.0/24"]
+  data_private_subnet_cidrs = ["10.10.16.0/24", "10.10.17.0/24"]
 
   common_tags = {
     Project     = var.project_name
     Environment = var.environment
     Owner       = var.owner_prefix
     ManagedBy   = "terraform"
+    ISMS_Scope  = "True"
   }
 }
 
@@ -34,9 +35,11 @@ module "vpc" {
   public_subnet_cidrs        = local.public_subnet_cidrs
   app_private_subnet_cidrs   = local.app_private_subnet_cidrs
   data_private_subnet_cidrs  = local.data_private_subnet_cidrs
-  cache_private_subnet_cidrs = []  # DEV는 cache 없음
+  cache_private_subnet_cidrs = local.cache_private_subnet_cidrs
+  pg_private_subnet_cidrs    = local.pg_private_subnet_cidrs
 
   enable_nat_gateway   = true
+  enable_pg_nat        = true
   single_nat_gateway   = true
   enable_vpc_endpoints = true
 
@@ -75,6 +78,24 @@ module "eks" {
 }
 
 # -----------------------------------------------------------------------------
+# Valkey (ElastiCache) Module - RDS보다 먼저 생성 권장
+# -----------------------------------------------------------------------------
+module "valkey" {
+  source = "../../modules/valkey"
+
+  name_prefix = local.name_prefix
+  environment = var.environment
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.cache_private_subnet_ids
+  
+  # 보안 그룹: 일단 전체 허용 (테스트용)
+  allowed_security_group_ids = [module.vpc.cache_security_group_id]
+
+  tags = local.common_tags
+}
+
+# -----------------------------------------------------------------------------
 # RDS PostgreSQL Module
 # -----------------------------------------------------------------------------
 module "rds" {
@@ -93,8 +114,13 @@ module "rds" {
   # DEV 설정
   deletion_protection = false
   skip_final_snapshot = true
+  
+  # 암호화 추가 (ISMS-P)
+  storage_encrypted   = true
 
   tags = local.common_tags
+
+  depends_on = [module.valkey] # 구축 순서 명시
 }
 
 # -----------------------------------------------------------------------------
@@ -108,4 +134,21 @@ module "ecr" {
   repository_names = ["api", "storefront", "dashboard"]
 
   tags = local.common_tags
+}
+
+# -----------------------------------------------------------------------------
+# Security Module (WAFv2 & CloudFront)
+# -----------------------------------------------------------------------------
+module "security" {
+  source = "../../modules/security"
+  
+  providers = {
+    aws = aws.us_east_1 # WAFv2 CloudFront scope는 반드시 us-east-1
+  }
+
+  name_prefix = local.name_prefix
+  tags        = local.common_tags
+
+  # ExternalDNS로 생성될 오리진 도메인
+  origin_domain_name = "origin-dev-kyeol.msp-g1.click"
 }

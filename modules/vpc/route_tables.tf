@@ -67,3 +67,30 @@ resource "aws_route_table_association" "cache_private" {
   subnet_id      = aws_subnet.cache_private[count.index].id
   route_table_id = aws_route_table.private.id
 }
+
+# -----------------------------------------------------------------------------
+# PG Dedicated Route Table (PG 전용 NAT Gateway 사용)
+# -----------------------------------------------------------------------------
+resource "aws_route_table" "pg" {
+  count  = var.enable_pg_nat ? 1 : 0
+  vpc_id = aws_vpc.main.id
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-rt-pg"
+  })
+}
+
+resource "aws_route" "pg_nat" {
+  count = var.enable_pg_nat ? 1 : 0
+
+  route_table_id         = aws_route_table.pg[0].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.pg[0].id
+}
+
+resource "aws_route_table_association" "pg_private" {
+  count = length(aws_subnet.pg_private)
+
+  subnet_id      = aws_subnet.pg_private[count.index].id
+  route_table_id = aws_route_table.pg[0].id
+}

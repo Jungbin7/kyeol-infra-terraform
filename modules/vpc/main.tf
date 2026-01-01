@@ -99,3 +99,19 @@ resource "aws_subnet" "cache_private" {
     Tier = "cache-private"
   })
 }
+
+# -----------------------------------------------------------------------------
+# PG Private Subnets (결제 API용 고정 IP 서브넷)
+# -----------------------------------------------------------------------------
+resource "aws_subnet" "pg_private" {
+  count = length(var.pg_private_subnet_cidrs)
+
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.pg_private_subnet_cidrs[count.index]
+  availability_zone = var.azs[count.index % local.az_count]
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-sub-pg-${local.az_suffixes[count.index % local.az_count]}"
+    Tier = "pg-private"
+  })
+}

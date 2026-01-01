@@ -8,7 +8,7 @@ provider "aws" {
       Project     = "kyeol"
       Environment = "mgmt"
       ManagedBy   = "terraform"
-      Owner       = "min"
+      Owner       = "jung"
     }
   }
 }

@@ -8,7 +8,22 @@ provider "aws" {
       Project     = "kyeol"
       Environment = "dev"
       ManagedBy   = "terraform"
-      Owner       = "min"
+      Owner       = "jung"
+    }
+  }
+}
+
+# WAFv2 (CloudFront) 전용 프로바이더
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Project     = "kyeol"
+      Environment = "dev"
+      ManagedBy   = "terraform"
+      Owner       = "jung"
     }
   }
 }

@@ -33,6 +33,7 @@ module "vpc" {
   app_private_subnet_cidrs   = local.app_private_subnet_cidrs
   data_private_subnet_cidrs  = []  # MGMT는 data subnet 없음
   cache_private_subnet_cidrs = []  # MGMT는 cache 없음
+  pg_private_subnet_cidrs    = []  # MGMT는 PG 전용 NAT 불필요
 
   enable_nat_gateway   = true
   single_nat_gateway   = true
