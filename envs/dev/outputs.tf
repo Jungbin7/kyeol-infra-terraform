@@ -79,3 +79,9 @@ output "ecr_repository_urls" {
   description = "ECR 리포지토리 URL 맵"
   value       = module.ecr.repository_urls
 }
+
+# Valkey
+output "valkey_primary_endpoint" {
+  description = "Valkey 기본 엔드포인트"
+  value       = module.valkey.cache_endpoint
+}
