@@ -1,5 +1,5 @@
 # Bootstrap: 변수 정의
-# min-kyeol-bootstrap
+# jung-kyeol-bootstrap
 
 variable "aws_region" {
   description = "AWS 리전"

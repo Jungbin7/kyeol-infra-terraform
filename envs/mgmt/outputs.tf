@@ -57,3 +57,8 @@ output "kubeconfig_command" {
   description = "kubeconfig 설정 명령어"
   value       = module.eks.kubeconfig_command
 }
+
+output "github_actions_role_arn" {
+  description = "GitHub Actions용 IAM 역할 ARN"
+  value       = module.github_oidc.github_actions_role_arn
+}

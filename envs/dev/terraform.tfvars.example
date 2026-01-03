@@ -2,21 +2,21 @@
 # 이 파일을 terraform.tfvars로 복사하고 실제 값을 입력하세요.
 
 # AWS 리전
-aws_region = "ap-southeast-2"
+aws_region = "ap-northeast-1"
 
 # AWS 계정 ID (필수)
 aws_account_id = "123456789012"
 
 # 프로젝트 설정
 project_name = "kyeol"
-owner_prefix = "min"
+owner_prefix = "jung"
 environment  = "dev"
 
 # VPC CIDR (spec.md 기준)
 vpc_cidr = "10.10.0.0/16"
 
-# 가용영역 (Sydney)
-azs = ["ap-southeast-2a", "ap-southeast-2c"]
+# 가용영역 (Tokyo)
+azs = ["ap-northeast-1a", "ap-northeast-1c"]
 
 # EKS 설정
 eks_cluster_version     = "1.29"
@@ -29,6 +29,6 @@ eks_node_max_size       = 2
 rds_instance_class = "db.t3.small"
 rds_multi_az       = false
 
-# Route53 Hosted Zone ID (msp-g1.click)
-# ExternalDNS가 origin-dev-kyeol.msp-g1.click 레코드를 관리합니다.
+# Route53 Hosted Zone ID (mgz-g2-u3.shop)
+# ExternalDNS가 dev.mgz-g2-u3.shop 레코드를 관리합니다.
 hosted_zone_id = "Z0XXXXXXXXXXXX"

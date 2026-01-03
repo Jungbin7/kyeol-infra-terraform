@@ -11,12 +11,12 @@ CloudFront 배포에 사용할 ACM 인증서를 생성합니다.
 
 ## 인증서 구성
 
-- 도메인: `msp-g1.click`
+- 도메인: `mgz-g2-u3.shop`
 - SAN:
-  - `*.msp-g1.click`
-  - `dev-kyeol.msp-g1.click`
-  - `stage-kyeol.msp-g1.click`
-  - `kyeol.msp-g1.click`
+  - `*.mgz-g2-u3.shop`
+  - `dev.mgz-g2-u3.shop`
+  - `stage.mgz-g2-u3.shop`
+  - `mgz-g2-u3.shop`
 
 ## 사용 방법
 

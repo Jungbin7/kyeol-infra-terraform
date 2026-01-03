@@ -1,5 +1,5 @@
 # Bootstrap: AWS Provider 설정
-# min-kyeol-bootstrap
+# jung-kyeol-bootstrap
 
 provider "aws" {
   region = var.aws_region
@@ -9,7 +9,7 @@ provider "aws" {
       Project     = "kyeol"
       Environment = "bootstrap"
       ManagedBy   = "terraform"
-      Owner       = "min"
+      Owner       = "jung"
     }
   }
 }

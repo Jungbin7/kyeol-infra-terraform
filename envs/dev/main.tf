@@ -39,7 +39,7 @@ module "vpc" {
   pg_private_subnet_cidrs    = local.pg_private_subnet_cidrs
 
   enable_nat_gateway   = true
-  enable_pg_nat        = true
+  enable_pg_nat        = false
   single_nat_gateway   = true
   enable_vpc_endpoints = true
 
@@ -90,7 +90,7 @@ module "valkey" {
   subnet_ids = module.vpc.cache_private_subnet_ids
   
   # 보안 그룹: 일단 전체 허용 (테스트용)
-  allowed_security_group_ids = [module.vpc.cache_security_group_id]
+  security_group_ids = [module.vpc.cache_security_group_id]
 
   tags = local.common_tags
 }
@@ -149,6 +149,10 @@ module "security" {
   name_prefix = local.name_prefix
   tags        = local.common_tags
 
+  # ACM 및 도메인 연결
+  acm_certificate_arn = var.acm_certificate_arn_virginia
+  domain_name         = var.domain_name
+  
   # ExternalDNS로 생성될 오리진 도메인
-  origin_domain_name = "origin-dev-kyeol.msp-g1.click"
+  origin_domain_name = "origin-dev-kyeol.${var.domain_name}"
 }

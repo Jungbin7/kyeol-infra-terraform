@@ -1,6 +1,6 @@
 # Bootstrap: 로컬 백엔드 (초기화용)
 # Bootstrap은 자기 자신을 S3에 저장할 수 없으므로 로컬 사용
-# min-kyeol-bootstrap
+# jung-kyeol-bootstrap
 
 terraform {
   backend "local" {

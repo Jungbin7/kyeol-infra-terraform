@@ -1,5 +1,5 @@
 # Bootstrap: Terraform tfstate 원격 저장소 설정
-# min-kyeol-bootstrap
+# jung-kyeol-bootstrap
 #
 # 이 모듈은 다음을 생성합니다:
 # - S3 버킷: Terraform state 저장

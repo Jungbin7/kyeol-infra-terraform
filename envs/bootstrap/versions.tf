@@ -1,5 +1,5 @@
 # Bootstrap: Terraform 버전 요구사항
-# min-kyeol-bootstrap
+# jung-kyeol-bootstrap
 
 terraform {
   required_version = ">= 1.5.0"

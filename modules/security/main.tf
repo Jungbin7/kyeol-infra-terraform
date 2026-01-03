@@ -12,7 +12,7 @@ variable "tags" {
 }
 
 variable "origin_domain_name" {
-  description = "ALB domain name (e.g., origin-dev-kyeol.msp-g1.click)"
+  description = "ALB domain name (e.g., dev.mgz-g2-u3.shop)"
   type        = string
 }
 
@@ -79,6 +79,8 @@ resource "aws_cloudfront_distribution" "main" {
   comment             = "CloudFront for ${var.name_prefix}"
   default_root_object = ""
 
+  aliases = var.domain_name != "" ? [var.domain_name, "*.${var.domain_name}"] : []
+
   web_acl_id = aws_wafv2_web_acl.cf.arn
 
   default_cache_behavior {
@@ -107,7 +109,10 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true # 실제 운영 시 ACM ARN 연결 필요
+    cloudfront_default_certificate = var.acm_certificate_arn == "" ? true : false
+    acm_certificate_arn            = var.acm_certificate_arn
+    ssl_support_method             = var.acm_certificate_arn == "" ? null : "sni-only"
+    minimum_protocol_version       = var.acm_certificate_arn == "" ? "TLSv1" : "TLSv1.2_2021"
   }
 
   tags = var.tags

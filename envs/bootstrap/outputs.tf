@@ -1,5 +1,5 @@
 # Bootstrap: 출력값 정의
-# min-kyeol-bootstrap
+# jung-kyeol-bootstrap
 
 output "tfstate_bucket_name" {
   description = "Terraform state S3 버킷 이름"

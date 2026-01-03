@@ -73,4 +73,15 @@ module "eks" {
   tags = local.common_tags
 }
 
+# -----------------------------------------------------------------------------
+# GitHub Actions OIDC Module
+# -----------------------------------------------------------------------------
+module "github_oidc" {
+  source = "../../modules/iam_github_oidc"
+
+  name_prefix = local.name_prefix
+  github_org  = "Jungbin7" # 사용자님의 깃허브 ID
+  tags        = local.common_tags
+}
+
 # Note: MGMT 환경에는 RDS/Cache 없음 (ArgoCD/모니터링 전용)

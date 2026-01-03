@@ -92,5 +92,5 @@ resource "aws_route_table_association" "pg_private" {
   count = length(aws_subnet.pg_private)
 
   subnet_id      = aws_subnet.pg_private[count.index].id
-  route_table_id = aws_route_table.pg[0].id
+  route_table_id = var.enable_pg_nat ? aws_route_table.pg[0].id : aws_route_table.private.id
 }

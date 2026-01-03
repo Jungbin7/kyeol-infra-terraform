@@ -1,23 +1,18 @@
 # Valkey (ElastiCache) Module: 출력값
 
-output "cache_cluster_id" {
-  description = "ElastiCache 클러스터 ID"
-  value       = aws_elasticache_cluster.main.id
+output "cache_replication_group_id" {
+  description = "ElastiCache 복제 그룹 ID"
+  value       = aws_elasticache_replication_group.main.id
 }
 
-output "cache_cluster_arn" {
-  description = "ElastiCache 클러스터 ARN"
-  value       = aws_elasticache_cluster.main.arn
-}
-
-output "cache_nodes" {
-  description = "캐시 노드 목록"
-  value       = aws_elasticache_cluster.main.cache_nodes
+output "cache_replication_group_arn" {
+  description = "ElastiCache 복제 그룹 ARN"
+  value       = aws_elasticache_replication_group.main.arn
 }
 
 output "cache_endpoint" {
-  description = "캐시 엔드포인트 (첫 번째 노드)"
-  value       = length(aws_elasticache_cluster.main.cache_nodes) > 0 ? aws_elasticache_cluster.main.cache_nodes[0].address : null
+  description = "캐시 프라이머리 엔드포인트"
+  value       = aws_elasticache_replication_group.main.primary_endpoint_address
 }
 
 output "cache_port" {

@@ -1,7 +1,7 @@
 # RDS PostgreSQL Module: 변수 정의
 
 variable "name_prefix" {
-  description = "리소스 이름 프리픽스 (예: min-kyeol-dev)"
+  description = "리소스 이름 프리픽스 (예: jung-kyeol-dev)"
   type        = string
 }
 
@@ -41,7 +41,7 @@ variable "db_username" {
 variable "engine_version" {
   description = "PostgreSQL 엔진 버전"
   type        = string
-  default     = "16"  # ap-southeast-2에서 사용 가능한 버전
+  default     = "16"  # ap-northeast-1에서 사용 가능한 버전
 }
 
 variable "instance_class" {

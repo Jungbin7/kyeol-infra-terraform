@@ -77,5 +77,5 @@ output "cluster_security_group_id" {
 # kubeconfig 명령어 예시
 output "kubeconfig_command" {
   description = "kubeconfig 설정 명령어"
-  value       = "aws eks update-kubeconfig --region ${data.aws_region.current.name} --name ${aws_eks_cluster.main.name}"
+  value       = "aws eks update-kubeconfig --region ${data.aws_region.current.id} --name ${aws_eks_cluster.main.name}"
 }

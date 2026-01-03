@@ -73,9 +73,21 @@ variable "eks_node_max_size" {
   default     = 3
 }
 
-# Route53
+# Route53 & ACM
+variable "domain_name" {
+  description = "메인 도메인 이름 (예: mgz-g2-u3.shop)"
+  type        = string
+  default     = ""
+}
+
 variable "hosted_zone_id" {
-  description = "Route53 Hosted Zone ID (msp-g1.click)"
+  description = "Route53 Hosted Zone ID"
+  type        = string
+  default     = ""
+}
+
+variable "acm_certificate_arn_tokyo" {
+  description = "ACM 인증서 ARN (Tokyo)"
   type        = string
   default     = ""
 }

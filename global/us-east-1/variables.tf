@@ -3,7 +3,7 @@
 variable "domain_name" {
   description = "메인 도메인 이름"
   type        = string
-  default     = "msp-g1.click"
+  default     = "mgz-g2-u3.shop"
 }
 
 variable "hosted_zone_id" {
@@ -15,9 +15,9 @@ variable "subject_alternative_names" {
   description = "추가 SAN (Subject Alternative Names)"
   type        = list(string)
   default = [
-    "*.msp-g1.click",
-    "dev-kyeol.msp-g1.click",
-    "stage-kyeol.msp-g1.click",
-    "kyeol.msp-g1.click"
+    "*.mgz-g2-u3.shop",
+    "dev.mgz-g2-u3.shop",
+    "stage.mgz-g2-u3.shop",
+    "mgz-g2-u3.shop"
   ]
 }

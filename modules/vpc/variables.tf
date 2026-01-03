@@ -1,7 +1,7 @@
 # VPC Module: 변수 정의
 
 variable "name_prefix" {
-  description = "리소스 이름 프리픽스 (예: min-kyeol-dev)"
+  description = "리소스 이름 프리픽스 (예: jung-kyeol-dev)"
   type        = string
 }
 
@@ -16,7 +16,7 @@ variable "vpc_cidr" {
 }
 
 variable "azs" {
-  description = "사용할 가용영역 목록 (예: [\"ap-southeast-2a\", \"ap-southeast-2c\"])"
+  description = "사용할 가용영역 목록 (예: [\"ap-northeast-1a\", \"ap-northeast-1c\"])"
   type        = list(string)
 }
 

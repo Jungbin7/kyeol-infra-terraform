@@ -30,5 +30,5 @@ terraform plan
 terraform apply -auto-approve
 
 # 5. kubeconfig 설정
-aws eks update-kubeconfig --region ap-southeast-2 --name min-kyeol-mgmt-eks
+aws eks update-kubeconfig --region ap-northeast-1 --name jung-kyeol-mgmt-eks
 ```
