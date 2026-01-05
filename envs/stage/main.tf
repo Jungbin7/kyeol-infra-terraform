@@ -5,19 +5,20 @@ locals {
   name_prefix  = "${var.owner_prefix}-${var.project_name}-${var.environment}"
   cluster_name = "${local.name_prefix}-eks"
 
-  # STAGE CIDR 설정 (Tokyo 리전 기준) - 10.20.x.x 대역
+  # STAGE CIDR 설정 (사용자 지정: 2AZ, 4티어)
   public_subnet_cidrs       = ["10.20.0.0/24", "10.20.1.0/24"]
-  app_private_subnet_cidrs  = ["10.20.4.0/22", "10.20.8.0/22"] 
-  pg_private_subnet_cidrs   = ["10.20.12.0/24"]
-  cache_private_subnet_cidrs = ["10.20.13.0/24", "10.20.14.0/24"]
-  data_private_subnet_cidrs = ["10.20.16.0/24", "10.20.17.0/24"]
+  app_private_subnet_cidrs  = ["10.20.4.0/22", "10.20.12.0/22"] 
+  cache_private_subnet_cidrs = ["10.20.8.0/26", "10.20.8.64/26"]
+  data_private_subnet_cidrs = ["10.20.9.0/24", "10.20.10.0/24"]
+  pg_private_subnet_cidrs    = [] # STAGE는 일단 PG NAT 불필요
 
-  common_tags = {
-    Project     = var.project_name
+  tags = {
+    Project     = "Kyeol-Migration"
     Environment = var.environment
-    Owner       = var.owner_prefix
-    ManagedBy   = "terraform"
-    ISMS_Scope  = "True"
+    Owner       = "InfraTeam"
+    Service     = "Commerce"
+    ManagedBy   = "Terraform"
+    ISMS-P      = "In-Scope"
   }
 }
 
@@ -45,7 +46,7 @@ module "vpc" {
 
   eks_cluster_name = local.cluster_name
 
-  tags = local.common_tags
+  tags = local.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -74,7 +75,7 @@ module "eks" {
   enable_external_dns_irsa    = true
   external_dns_hosted_zone_id = var.hosted_zone_id
 
-  tags = local.common_tags
+  tags = local.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -92,7 +93,7 @@ module "valkey" {
   # 보안 그룹: 일단 전체 허용 (테스트용)
   security_group_ids = [module.vpc.cache_security_group_id]
 
-  tags = local.common_tags
+  tags = local.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -118,7 +119,7 @@ module "rds" {
   # 암호화 추가 (ISMS-P)
   storage_encrypted   = true
 
-  tags = local.common_tags
+  tags = local.tags
 
   depends_on = [module.valkey] # 구축 순서 명시
 }
@@ -133,7 +134,7 @@ module "ecr" {
 
   repository_names = ["api", "storefront", "dashboard"]
 
-  tags = local.common_tags
+  tags = local.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -147,7 +148,7 @@ module "security" {
   }
 
   name_prefix = local.name_prefix
-  tags        = local.common_tags
+  tags        = local.tags
 
   # ACM 및 도메인 연결
   acm_certificate_arn = var.acm_certificate_arn_virginia

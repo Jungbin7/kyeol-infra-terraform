@@ -5,16 +5,17 @@ locals {
   name_prefix  = "${var.owner_prefix}-${var.project_name}-${var.environment}"
   cluster_name = "${local.name_prefix}-eks"
 
-  # MGMT CIDR 설정 (spec.md 기준)
-  public_subnet_cidrs      = ["10.40.0.0/24", "10.40.1.0/24"]        # 2 AZ
-  app_private_subnet_cidrs = ["10.40.4.0/22", "10.40.12.0/22"]       # 2 AZ (ops-private)
-  # MGMT에는 data/cache subnet 없음 (ArgoCD/모니터링 전용)
+  # MGMT CIDR 설정 (사용자 지정: 2AZ)
+  public_subnet_cidrs      = ["10.40.0.0/24", "10.40.1.0/24"]
+  app_private_subnet_cidrs = ["10.40.4.0/22", "10.40.12.0/22"] # ops-private
 
-  common_tags = {
-    Project     = var.project_name
+  tags = {
+    Project     = "Kyeol-Migration"
     Environment = var.environment
-    Owner       = var.owner_prefix
-    ManagedBy   = "terraform"
+    Owner       = "InfraTeam"
+    Service     = "Commerce"
+    ManagedBy   = "Terraform"
+    ISMS-P      = "In-Scope"
   }
 }
 
@@ -41,7 +42,7 @@ module "vpc" {
 
   eks_cluster_name = local.cluster_name
 
-  tags = local.common_tags
+  tags = local.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -70,7 +71,7 @@ module "eks" {
   enable_external_dns_irsa    = true
   external_dns_hosted_zone_id = var.hosted_zone_id
 
-  tags = local.common_tags
+  tags = local.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -81,7 +82,7 @@ module "github_oidc" {
 
   name_prefix = local.name_prefix
   github_org  = "Jungbin7" # 사용자님의 깃허브 ID
-  tags        = local.common_tags
+  tags        = local.tags
 }
 
 # Note: MGMT 환경에는 RDS/Cache 없음 (ArgoCD/모니터링 전용)
